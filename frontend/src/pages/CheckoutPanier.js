@@ -3,13 +3,19 @@ import './CheckoutPanier.css';
 
 const CheckoutPanier = () => {
     const storedBasket = localStorage.getItem('basket');
-    const selectedProducts = storedBasket ? JSON.parse(storedBasket) : [];
+    let selectedProducts = storedBasket ? JSON.parse(storedBasket) : [];
     const totalPrice = (products) =>{
         let sum = 0;
         for(let p of products){
             sum = sum +( p.priceUnit * p.quantity ) ;
         }
         return sum;
+    }
+    const handleValidation = () => {
+        window.alert('Votre commande est validée !!','Alerte');
+        selectedProducts = [] ;
+        localStorage.setItem('basket',JSON.stringify(selectedProducts));
+        window.location.href = '/';
     }
     return (
         <div>
@@ -30,7 +36,7 @@ const CheckoutPanier = () => {
             <h3> Total </h3> {totalPrice(selectedProducts)} Euro
             <br></br>
             <hr></hr>
-            <button> Valider ma commande </button>
+            <button onClick={handleValidation}> Valider ma commande </button>
             </div>
         </div>
     );

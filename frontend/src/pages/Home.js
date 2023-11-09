@@ -12,10 +12,10 @@ const Home = () => {
     }, []);
     // fct pour ajouter le produit à la liste 
     const addProduct = (newProduct) => {
-        let i = 0 ;
-        if (selectedProducts.length !== 0){
-            while(i < selectedProducts.length-1 && selectedProducts[i].id !== newProduct.id ){
-                i++ ;
+        let i = 0;
+        if (selectedProducts.length !== 0) {
+            while (i < selectedProducts.length - 1 && selectedProducts[i].id !== newProduct.id) {
+                i++;
             }
             if (selectedProducts[i].id === newProduct.id) {
                 selectedProducts[i].quantity = selectedProducts[i].quantity + newProduct.quantity;
@@ -23,19 +23,19 @@ const Home = () => {
                 setSelectedProducts(update);
                 localStorage.setItem('basket', JSON.stringify(update));
             }
-            else{
+            else {
                 const updatedSelectedProduct = [...selectedProducts, newProduct];
                 setSelectedProducts(updatedSelectedProduct);
                 localStorage.setItem('basket', JSON.stringify(updatedSelectedProduct));
             }
         }
         else {
-                const updatedSelectedProduct = [...selectedProducts, newProduct];
-                setSelectedProducts(updatedSelectedProduct);
-                localStorage.setItem('basket', JSON.stringify(updatedSelectedProduct));
-        }    
-    }         
-       
+            const updatedSelectedProduct = [...selectedProducts, newProduct];
+            setSelectedProducts(updatedSelectedProduct);
+            localStorage.setItem('basket', JSON.stringify(updatedSelectedProduct));
+        }
+    }
+
     const products = [
         { id: 1, name: 'Chaussure femme', price: 19.99 },
         { id: 2, name: 'Pyjama enfant', price: 29.99 },

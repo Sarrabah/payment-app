@@ -3,13 +3,31 @@ const pool = require('../db.js');
 const Product = {
     findAll: async () => {
         try {
-            const [rows, fields] = await pool.execute('SELECT * FROM products');
+            const [rows] = await pool.execute('SELECT * FROM products');
             return rows;
         } catch (error) {
             console.error('Error fetching products from database:', error);
             throw error;
         }
+    },
+    updateQuantity: async (id, soldOutQuantity) => {
+        let rows;
+        try {
+            const req = 'SELECT inventory FROM products WHERE id = (?) ';
+            [rows] = await pool.execute(req, [id]);
+        } catch (error) {
+            console.error('Error fetching products from database:', error);
+            throw error;
+        }
+        try {
+            const inventory = rows[0].inventory - soldOutQuantity;
+            const query = 'UPDATE products SET inventory = (?) WHERE id =(?)';
+            const result = await pool.execute(query, [inventory, id]);
+        } catch (error) {
+            console.error('Error updating product quantity', error);
+            throw error;
+        }
     }
 };
 
-module.exports = Product;
+module.exports = Product

@@ -1,24 +1,34 @@
 const orders = require('../models/Orders');
 const orderDetails = require('../models/OrderDetails');
 const product = require('../models/Product');
+const pool = require('../db');
+
 
 const OrderController = {
     insertOrder: async (req, res) => {
+        const connection = await pool.getConnection();
+        await connection.execute('SET autocommit=0;');
         const data = req.body;
         try {
-            const result = await orders.insertOrder(data.totalPriceCmd);
+            await connection.beginTransaction();
+            console.log('Transaction started');
+            const result = await orders.insertOrder(connection, data.totalPriceCmd);
             const idOrder = result.insertId;
             for (let i = 0; i < data.productDetails.length; i++) {
                 const productDetail = data.productDetails[i];
-                orderDetails.insertOrderDetail(idOrder, productDetail.idProduct, productDetail.quantity);
-                product.updateQuantity(productDetail.idProduct, productDetail.quantity);
+                await orderDetails.insertOrderDetail(connection, idOrder, productDetail.idProduct, productDetail.quantity);
+                await product.updateQuantity(connection, productDetail.idProduct, productDetail.quantity);
             }
+            await connection.commit();
+            console.log('Transaction commited');
             res.status(200).json({ message: "Order accepted" })
         } catch (error) {
-            console.error('Order failed:', error);
-            res.status(500).json({ message: "Internal Server Error" });
+            await connection.rollback();
+            console.log('Transaction rollbacked');
+            res.status(500).json({ message: "Internal Server Error-order failed:", error });
+        } finally {
+            connection.release();
         }
-
     }
 }
 

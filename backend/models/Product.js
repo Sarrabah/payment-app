@@ -1,4 +1,4 @@
-const pool = require('../db.js');
+const pool = require('../db');
 
 const Product = {
     findAll: async () => {
@@ -10,7 +10,7 @@ const Product = {
             throw error;
         }
     },
-    updateQuantity: async (id, soldOutQuantity) => {
+    updateQuantity: async (connection, id, soldOutQuantity) => {
         let rows;
         try {
             const req = 'SELECT inventory FROM products WHERE id = (?) ';
@@ -22,7 +22,7 @@ const Product = {
         try {
             const inventory = rows[0].inventory - soldOutQuantity;
             const query = 'UPDATE products SET inventory = (?) WHERE id =(?)';
-            const result = await pool.execute(query, [inventory, id]);
+            const result = await connection.execute(query, [inventory, id]);
         } catch (error) {
             console.error('Error updating product quantity', error);
             throw error;

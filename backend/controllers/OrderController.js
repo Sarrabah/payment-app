@@ -2,12 +2,14 @@ const orders = require('../models/Orders');
 const orderDetails = require('../models/OrderDetails');
 const product = require('../models/Product');
 const pool = require('../db');
-
+const { Mutex } = require('async-mutex');
+const lock = new Mutex();
 
 const OrderController = {
     insertOrder: async (req, res) => {
         const connection = await pool.getConnection();
         await connection.execute('SET autocommit=0;');
+        const release = await lock.acquire();
         const data = req.body;
         try {
             await connection.beginTransaction();
@@ -27,6 +29,7 @@ const OrderController = {
             console.log('Transaction rollbacked');
             res.status(500).json({ message: "Internal Server Error-order failed:", error });
         } finally {
+            release();
             connection.release();
         }
     }

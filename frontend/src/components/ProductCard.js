@@ -1,10 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './ProductCard.css';
 
-const ProductCard = ({ product, addProduct}) => {
+const ProductCard = ({ product, addProduct }) => {
     const [count, setCount] = useState(0);
+    const [isSoldOut, setIsSoldOut] = useState(false);
+
+    useEffect(() => {
+        const storedBasket = localStorage.getItem("basket");
+        const basket = storedBasket ? JSON.parse(storedBasket) : [];
+        let i = 0;
+        let stop = false;
+        while ((i < basket.length) && (stop == false)) {
+            if (basket[i].id === product.id) {
+                setCount(basket[i].quantity);
+                stop = true;
+            }
+            i++;
+        }
+    }, [])
+
+    useEffect(() => {
+        if (count < product.inventory) {
+            setIsSoldOut(false);
+        }
+        else {
+            setIsSoldOut(true);
+        }
+    }, [count, product.inventory]);
+
     const addClick = () => {
-        setCount(count + 1);
+        if (count < product.inventory) {
+            setCount(count + 1);
+        }
     };
     const removeClick = () => {
         if (count > 0) {
@@ -12,14 +39,13 @@ const ProductCard = ({ product, addProduct}) => {
         }
     };
     const addToBasket = () => {
-        const productToAdd ={
-            id : product.id,
-            name :product.name,
+        const productToAdd = {
+            id: product.id,
+            name: product.name,
             priceUnit: product.price,
-            quantity:count
+            quantity: count
         }
         addProduct(productToAdd);
-        setCount(0);
     }
     return (
         <div className="product-card">
@@ -31,8 +57,8 @@ const ProductCard = ({ product, addProduct}) => {
                 <button onClick={addClick}> + </button><br></br>
             </p>
             <button onClick={addToBasket}>Ajouter au panier </button>
+            {isSoldOut && <p> Il ne reste plus de produit en stock </p>}
         </div>
     );
-
 };
 export default ProductCard;

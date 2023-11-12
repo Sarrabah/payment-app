@@ -12,7 +12,7 @@ const Home = () => {
         .then(response => response.json() )
         .then(data => setCatalogProduct(data.catalog))
         .catch(error => console.error("Error in fetching products",error));
-
+        
         const storedBasket = localStorage.getItem("basket");
         const products = storedBasket ? JSON.parse(storedBasket) : [];
         setSelectedProducts(products);
@@ -25,7 +25,7 @@ const Home = () => {
                 i++;
             }
             if (selectedProducts[i].id === newProduct.id) {
-                selectedProducts[i].quantity = selectedProducts[i].quantity + newProduct.quantity;
+                selectedProducts[i].quantity = newProduct.quantity;
                 const update = [...selectedProducts];
                 setSelectedProducts(update);
                 localStorage.setItem('basket', JSON.stringify(update));

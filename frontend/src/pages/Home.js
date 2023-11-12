@@ -9,39 +9,26 @@ const Home = () => {
 
     useEffect(() => {
         fetch('http://localhost:3001/api/products')
-        .then(response => response.json() )
-        .then(data => setCatalogProduct(data.catalog))
-        .catch(error => console.error("Error in fetching products",error));
-        
+            .then(response => response.json())
+            .then(data => setCatalogProduct(data.catalog))
+            .catch(error => console.error("Error in fetching products", error));
+
         const storedBasket = localStorage.getItem("basket");
         const products = storedBasket ? JSON.parse(storedBasket) : [];
         setSelectedProducts(products);
     }, []);
     // fct pour ajouter le produit à la liste 
     const addProduct = (newProduct) => {
-        let i = 0;
-        if (selectedProducts.length !== 0) {
-            while (i < selectedProducts.length - 1 && selectedProducts[i].id !== newProduct.id) {
-                i++;
-            }
-            if (selectedProducts[i].id === newProduct.id) {
-                selectedProducts[i].quantity = newProduct.quantity;
-                const update = [...selectedProducts];
-                setSelectedProducts(update);
-                localStorage.setItem('basket', JSON.stringify(update));
-            }
-            else {
-                const updatedSelectedProduct = [...selectedProducts, newProduct];
-                setSelectedProducts(updatedSelectedProduct);
-                localStorage.setItem('basket', JSON.stringify(updatedSelectedProduct));
-            }
+        const existingProductIndex = selectedProducts.findIndex(product => product.id === newProduct.id);
+        let updatedProducts = [...selectedProducts];
+        if (existingProductIndex !== -1) {
+            updatedProducts[existingProductIndex].quantity = newProduct.quantity;
+        } else {
+            updatedProducts = [...selectedProducts, newProduct];
         }
-        else {
-            const updatedSelectedProduct = [...selectedProducts, newProduct];
-            setSelectedProducts(updatedSelectedProduct);
-            localStorage.setItem('basket', JSON.stringify(updatedSelectedProduct));
-        }
-    }
+        setSelectedProducts(updatedProducts);
+        localStorage.setItem('basket', JSON.stringify(updatedProducts));
+    };
 
     const sum = (products) => {
         let total = 0;

@@ -11,11 +11,31 @@ const CheckoutPanier = () => {
         }
         return sum;
     }
-    const handleValidation = () => {
+    const handleValidation = async() => {
+        try{
+            const response = await fetch('http://localhost:3001/api/order',{
+             method: 'POST',
+             headers: {
+                'Content-Type': 'application/json',
+             },
+             body: JSON.stringify({
+                totalPriceCmd: totalPrice(selectedProducts),
+                productDetails: selectedProducts.map(product => ({
+                    idProduct: product.id,
+                    quantity: product.quantity,
+                })),
+             }),   
+            });
+            if (!response.ok) {
+                throw new Error('Order not validate');
+            }
         window.alert('Votre commande est validée !!','Alerte');
         selectedProducts = [] ;
         localStorage.setItem('basket',JSON.stringify(selectedProducts));
         window.location.href = '/';
+        } catch(error){
+            console.error('Error validating order:', error);
+        }
     }
     return (
         <div>

@@ -5,7 +5,14 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
     const [selectedProducts, setSelectedProducts] = useState([]);
+    const [catalogProduct, setCatalogProduct] = useState([]);
+
     useEffect(() => {
+        fetch('http://localhost:3001/api/products')
+        .then(response => response.json() )
+        .then(data => setCatalogProduct(data.catalog))
+        .catch(error => console.error("Error in fetching products",error));
+
         const storedBasket = localStorage.getItem("basket");
         const products = storedBasket ? JSON.parse(storedBasket) : [];
         setSelectedProducts(products);
@@ -36,10 +43,6 @@ const Home = () => {
         }
     }
 
-    const products = [
-        { id: 1, name: 'Chaussure femme', price: 19.99 },
-        { id: 2, name: 'Pyjama enfant', price: 29.99 },
-    ];
     const sum = (products) => {
         let total = 0;
         for (let p of products) {
@@ -54,7 +57,7 @@ const Home = () => {
                 <Link to="/checkout"> Consulter mon Panier </Link>
             </div>
             <h1> Liste des produits </h1>
-            <ProductListings products={products} addProduct={addProduct} />
+            <ProductListings products={catalogProduct} addProduct={addProduct} />
         </div>
     );
 };

@@ -7,8 +7,8 @@ const productController = {
             res.setHeader('Content-Type', 'application/json');
             res.json({"catalog": products});
         } catch (error) {
-            console.error('Error fetching products:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
+            res.status(500);
+            res.json({ error: 'Internal Server Error' });
         }
     }
 };

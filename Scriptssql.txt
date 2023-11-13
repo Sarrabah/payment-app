@@ -35,6 +35,7 @@ CREATE TABLE Orders (
     totalPrice DECIMAL(10,2)
 );
 
+-- Inserting 3 orders
 INSERT INTO Orders (totalPrice) VALUES (150.00), (200.50), (75.20);
 
 -- Create OrderDetails table
@@ -46,6 +47,8 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (orderId) REFERENCES orders(orderId),
     FOREIGN KEY (productId) REFERENCES products(id)
 );
+
+-- Inserting 5 order details
 
 INSERT INTO OrderDetails (orderId, productId, soldQuantity) VALUES
     (1, 1, 3),

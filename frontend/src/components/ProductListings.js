@@ -1,10 +1,9 @@
 import React from 'react';
-import './ProductListings.css';
 import ProductCard from './ProductCard';
 
 const ProductListings = ({ products, addProduct }) => {
   return (
-    <div className="product-listings">
+    <div className="flex flex-wrap">
       {products.map((product) => (
         <div key={product.id} >
           <ProductCard product={product} addProduct={addProduct} />

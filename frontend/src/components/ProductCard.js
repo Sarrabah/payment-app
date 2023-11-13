@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './ProductCard.css';
+//import './ProductCard.css';
 
 const ProductCard = ({ product, addProduct }) => {
     const [count, setCount] = useState(0);
@@ -48,16 +48,16 @@ const ProductCard = ({ product, addProduct }) => {
         addProduct(productToAdd);
     }
     return (
-        <div className="product-card">
-            <h3>{product.name}</h3>
-            <p>Prix: ${product.price}</p>
-            <p>
-                <button onClick={removeClick}> - </button>
-                <p>{count}</p>
-                <button onClick={addClick}> + </button><br></br>
-            </p>
-            <button onClick={addToBasket}>Ajouter au panier </button>
-            {isSoldOut && <p> Il ne reste plus de produit en stock </p>}
+        <div className="product-card bg-white p-4 rounded shadow">
+            <h3 className="text-lg font-bold mb-2">{product.name}</h3>
+            <p className="text-gray-700">Prix: Euro {product.price}</p>
+            <div className="items-center mt-2">
+                <button onClick={removeClick} className="bg-gray-200 px-3 py-1 rounded"> - </button>
+                <p className="mx-2">{count}</p>
+                <button onClick={addClick} className="bg-gray-200 px-3 py-1 rounded"> + </button>
+            </div>
+            <button onClick={addToBasket} className={`mt-2 bg-blue-500 text-white px-4 py-2 rounded ${isSoldOut ? 'opacity-50 cursor-not-allowed' : ''}`}>Ajouter au panier </button>
+            {isSoldOut && <p className="text-red-500"> Il ne reste plus de produit en stock </p>}
         </div>
     );
 };

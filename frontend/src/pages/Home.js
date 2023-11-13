@@ -38,12 +38,17 @@ const Home = () => {
         return total;
     }
     return (
-        <div className='Home'>
-            <div className="panier">
-                <p> la somme des produits: {sum(selectedProducts)} </p>
-                <Link to="/checkout"> Consulter mon Panier </Link>
+        <div className='flex flex-col items-center text-center'>
+            <div className="panier text-right bg-gray-200 p-4">
+                <div className="container mx-auto flex justify-between items-center">
+                    <h2 className="text-2xl font-bold mb-0">My Payment App</h2>
+                    <div>
+                        <p className="mb-2">La somme des produits: {sum(selectedProducts)} </p>
+                        <Link to="/checkout" className="text-blue-500">Consulter mon Panier</Link>
+                    </div>
+                </div>
             </div>
-            <h1> Liste des produits </h1>
+            <h1 className="text-3xl font-bold mt-4 mb-2"> Liste des produits </h1>
             <ProductListings products={catalogProduct} addProduct={addProduct} />
         </div>
     );

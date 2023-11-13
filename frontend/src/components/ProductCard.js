@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-//import './ProductCard.css';
+import './ProductCard.css';
 
 const ProductCard = ({ product, addProduct }) => {
     const [count, setCount] = useState(0);
@@ -50,7 +50,7 @@ const ProductCard = ({ product, addProduct }) => {
     return (
         <div className="product-card bg-white p-4 rounded shadow">
             <h3 className="text-lg font-bold mb-2">{product.name}</h3>
-            <p className="text-gray-700">Prix: Euro {product.price}</p>
+            <p className="text-gray-700">Prix: {product.price} Euro </p>
             <div className="items-center mt-2">
                 <button onClick={removeClick} className="bg-gray-200 px-3 py-1 rounded"> - </button>
                 <p className="mx-2">{count}</p>

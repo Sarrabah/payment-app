@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 const CheckoutPanier = () => {
     const storedBasket = localStorage.getItem('basket');
@@ -55,6 +56,7 @@ const CheckoutPanier = () => {
                 <hr></hr>
                 <button onClick={handleValidation} className="bg-blue-500 text-white px-4 py-2 rounded mt-4"> Valider ma commande </button>
             </div>
+            <Link to="/" className="text-blue-500">Retour à la page d'accueil </Link>
         </div>
     );
 }
